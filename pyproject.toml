@@ -1,0 +1,25 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "archi_panel"
+version = "1.0.0"
+authors = [
+    { name = "Rami ALBASHA", email = "rami.albasha@inrae.fr" },
+    { name = "Mathilde MILLAN", email = "mathilde.millan@inrae.fr" },
+	{ name = "Benoit PALLAS", email = "benoit.pallas@inrae.fr" },
+]
+description = "Analysis of the impact of grapevine architectural traits on its water use efficiency"
+readme = "README.md"
+requires-python = ">=3.7"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: BSD License",
+    "Operating System :: OS Independent",
+	"Natural Language :: English",
+]
+
+[project.urls]
+"Homepage" = "https://github.com/Mathilde1704/archi_panel"
+"Bug Tracker" = "https://github.com/Mathilde1704/archi_panel/issues"

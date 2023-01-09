@@ -68,7 +68,7 @@ if __name__ == '__main__':
     path_preprocessed_data = path_project / 'preprocessed_inputs'
     is_preprocess_data = False
 
-    g, scene = build_mtg(path_file=path_project / 'grapevine_pot.csv', is_show_scene=False)
+    g, scene = build_mtg(path_file=path_project / 'digit_single_pot.csv', is_show_scene=False)
 
     if is_preprocess_data:
         preprocess_inputs(grapevine_mtg=g, path_project_dir=path_project, psi_soil=-0.5, gdd_since_budbreak=1000.,

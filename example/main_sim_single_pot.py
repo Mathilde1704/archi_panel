@@ -67,8 +67,10 @@ if __name__ == '__main__':
     with open(path_preprocessed_data / 'dynamic.json') as f:
         dynamic_inputs = load(f)
 
-    summary_results = model.run(g=g, wd=path_project, scene=scene, gdd_since_budbreak=1000.,
-                                form_factors=static_inputs['form_factors'],
-                                leaf_nitrogen=static_inputs['Na'],
-                                leaf_ppfd=dynamic_inputs,
-                                path_output=path_project / 'output' / 'time_series_with_preprocessed_data.csv')
+    summary_results = model.run(
+        g=g,
+        wd=path_project,
+        scene=scene,
+        psi_soil=-0.5,
+        gdd_since_budbreak=100.,
+        path_output=path_project / 'output' / 'time_series_with_preprocessed_data.csv')

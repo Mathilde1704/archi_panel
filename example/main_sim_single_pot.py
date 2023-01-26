@@ -5,23 +5,11 @@ simple shoot architecture.
 from json import load, dump
 from pathlib import Path
 
-from hydroshoot import architecture, io, model, initialisation, display
-from openalea.mtg import traversal, mtg
+from hydroshoot import io, model, initialisation
+from openalea.mtg import mtg
 from openalea.plantgl.all import Scene
 
-
-def build_mtg(path_file: Path, is_show_scene: bool = True) -> (mtg.MTG, Scene):
-    grapevine_mtg = architecture.vine_mtg(file_path=path_file)
-
-    for v in traversal.iter_mtg2(grapevine_mtg, grapevine_mtg.root):
-        architecture.vine_phyto_modular(grapevine_mtg, v)
-        architecture.vine_mtg_properties(grapevine_mtg, v)
-        architecture.vine_mtg_geometry(grapevine_mtg, v)
-        architecture.vine_transform(grapevine_mtg, v)
-
-    # Display of the plant mock-up (result in 'fig_01_plant_mock_up.png')
-    mtg_scene = display.visu(grapevine_mtg, def_elmnt_color_dict=True, scene=Scene(), view_result=is_show_scene)
-    return grapevine_mtg, mtg_scene
+from example.common import build_mtg
 
 
 def preprocess_inputs(grapevine_mtg: mtg.MTG, path_project_dir: Path, psi_soil: float, gdd_since_budbreak: float,
@@ -68,7 +56,7 @@ if __name__ == '__main__':
     path_preprocessed_data = path_project / 'preprocessed_inputs'
     is_preprocess_data = False
 
-    g, scene = build_mtg(path_file=path_project / 'grapevine_pot.csv', is_show_scene=False)
+    g, scene = build_mtg(path_file=path_project / 'digit_single_pot.csv', is_show_scene=False)
 
     if is_preprocess_data:
         preprocess_inputs(grapevine_mtg=g, path_project_dir=path_project, psi_soil=-0.5, gdd_since_budbreak=1000.,
@@ -79,8 +67,10 @@ if __name__ == '__main__':
     with open(path_preprocessed_data / 'dynamic.json') as f:
         dynamic_inputs = load(f)
 
-    summary_results = model.run(g=g, wd=path_project, scene=scene, gdd_since_budbreak=1000.,
-                                form_factors=static_inputs['form_factors'],
-                                leaf_nitrogen=static_inputs['Na'],
-                                leaf_ppfd=dynamic_inputs,
-                                path_output=path_project / 'output' / 'time_series_with_preprocessed_data.csv')
+    summary_results = model.run(
+        g=g,
+        wd=path_project,
+        scene=scene,
+        psi_soil=-0.5,
+        gdd_since_budbreak=100.,
+        path_output=path_project / 'output' / 'time_series_with_preprocessed_data.csv')

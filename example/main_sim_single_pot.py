@@ -71,6 +71,9 @@ if __name__ == '__main__':
         g=g,
         wd=path_project,
         scene=scene,
+        leaf_nitrogen=static_inputs['Na'],
+        form_factors=static_inputs['form_factors'],
+        leaf_ppfd=dynamic_inputs,
         psi_soil=-0.5,
         gdd_since_budbreak=100.,
         path_output=path_project / 'output' / 'time_series_with_preprocessed_data.csv')

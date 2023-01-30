@@ -2,15 +2,8 @@
 
 from pathlib import Path
 
-from openalea.mtg.mtg import MTG
-
 from archi_panel.simulator import hydroshoot_wrapper
 from example.common import build_mtg
-
-
-def handle_twin_pots(g: MTG, plant_id: int) -> MTG:
-    pass
-
 
 if __name__ == '__main__':
     path_project = Path(__file__).parent

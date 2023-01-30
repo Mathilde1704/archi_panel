@@ -26,7 +26,7 @@ def preprocess_inputs(grapevine_mtg: mtg.MTG, path_project_dir: Path, psi_soil: 
     static_data = {'form_factors': {s: grapevine_mtg.property(s) for s in ('ff_sky', 'ff_leaves', 'ff_soil')}}
     static_data.update({'Na': grapevine_mtg.property('Na')})
     with open(path_preprocessed_inputs / 'static.json', mode='w') as f_prop:
-        dump(static_data, f_prop)
+        dump(static_data, f_prop, indent=2)
     pass
 
     print("Computing 'dynamic' data...")
@@ -47,7 +47,7 @@ def preprocess_inputs(grapevine_mtg: mtg.MTG, path_project_dir: Path, psi_soil: 
             'Eabs': grapevine_mtg.property('Eabs')}})
 
     with open(path_preprocessed_inputs / 'dynamic.json', mode='w') as f_prop:
-        dump(dynamic_data, f_prop)
+        dump(dynamic_data, f_prop, indent=2)
     pass
 
 

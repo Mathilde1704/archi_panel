@@ -13,12 +13,12 @@ from example.common import build_mtg
 
 
 def preprocess_inputs(grapevine_mtg: mtg.MTG, path_project_dir: Path, psi_soil: float, gdd_since_budbreak: float,
-                      scene: Scene):
+                      scene: Scene, user_params: dict = None):
     path_preprocessed_inputs = path_project_dir / 'preprocessed_inputs'
     path_preprocessed_inputs.mkdir(parents=True, exist_ok=True)
 
-    inputs = io.HydroShootInputs(g=grapevine_mtg, path_project=path_project_dir, scene=scene, psi_soil=psi_soil,
-                                 gdd_since_budbreak=gdd_since_budbreak)
+    inputs = io.HydroShootInputs(g=grapevine_mtg, path_project=path_project_dir, user_params=user_params,
+                                 scene=scene, psi_soil=psi_soil, gdd_since_budbreak=gdd_since_budbreak)
     io.verify_inputs(g=grapevine_mtg, inputs=inputs)
     grapevine_mtg = initialisation.init_model(g=grapevine_mtg, inputs=inputs)
 

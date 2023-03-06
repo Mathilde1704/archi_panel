@@ -1,11 +1,11 @@
 {
   "simulation": {
-    "sdate": null,
-    "edate": null,
+    "sdate": "2021-08-10 00:00:00",
+    "edate": "2021-08-19 00:00:00",
     "latitude": 43.61,
     "longitude": 3.87,
     "elevation": 44.0,
-	"meteo": null,
+	"meteo": "../data/weather.csv",
     "tzone": "Europe/Paris",
     "output_index": "",
     "unit_scene_length": "cm",
@@ -15,12 +15,12 @@
     "soil_water_deficit": false
   },
   "planting": {
-    "spacing_between_rows": null,
-    "spacing_on_row": null,
-    "row_angle_with_south": null
+    "spacing_between_rows": 1,
+    "spacing_on_row": 0.25,
+    "row_angle_with_south": 140
   },
   "phenology": {
-    "emdate": null,
+    "emdate": "2021-04-10 00:00:00",
     "t_base": 10.0
   },
   "mtg_api": {
@@ -40,7 +40,7 @@
     "t_error_threshold": 0.02
   },
   "irradiance": {
-    "E_type": null,
+    "E_type": "Rg_Watt/m2",
     "E_type2": "Eabs",
     "opt_prop": {
       "SW": {
@@ -94,7 +94,7 @@
   },
   "exchange": {
     "rbt": 0.6667,
-    "ca": 360.0,
+    "ca": 400.0,
     "Na_dict": {
       "aN": -0.0008,
       "bN": 3.3,
@@ -102,18 +102,14 @@
       "bM": 56.635
     },
     "par_gs": {
-      "model": "misson",
+      "model": "vpd",
       "g0": 0.02,
       "m0": 5.278,
-      "psi0": -1.0,
       "D0": 30.0,
-      "n": 4.0
+      "psi0": -1,
+      "n": 4
     },
     "par_photo": {
-      "Vcm25": 89.0,
-      "Jm25": 143.0,
-      "cRd": 0.008,
-      "TPU25": 10.0,
       "Kc25": 404.9,
       "Ko25": 278.4,
       "Tx25": 42.75,
@@ -176,11 +172,9 @@
     }
   },
   "soil": {
-    "soil_class": null,
+    "soil_class": "Sand",
     "soil_dimensions": {
-      "width": 3.6,
-      "length": 1.0,
-      "depth": 1.2
+      "depth": 0.75
     },
     "rhyzo_coeff": 0.5
   }

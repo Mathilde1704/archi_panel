@@ -7,8 +7,6 @@ from example.common import build_mtg
 
 if __name__ == '__main__':
     path_project = Path(__file__).parent
-    path_preprocessed_data = path_project / 'preprocessed_inputs'
-    is_preprocess_data = False
 
     g, scene = build_mtg(path_file=path_project / 'digit_twin_pots.csv', is_show_scene=False)
     hydroshoot_wrapper.run(

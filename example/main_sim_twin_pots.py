@@ -3,7 +3,7 @@
 from pathlib import Path
 
 from archi_panel.simulator import hydroshoot_wrapper
-from example.common import build_mtg
+from archi_panel.simulator.common import build_mtg
 
 if __name__ == '__main__':
     path_project = Path(__file__).parent

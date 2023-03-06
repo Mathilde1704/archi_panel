@@ -11,7 +11,7 @@ from hydroshoot.architecture import mtg_save_geometry, save_mtg
 from archi_panel.simulator import initialisation_twins
 from archi_panel.utils import copy_mtg, extract_mtg
 from config import Config2021
-from example.common import build_mtg
+from archi_panel.simulator.common import build_mtg
 
 
 def run_preprocess(params: dict, path_digit: Path, path_project: Path, path_preprocessed_inputs: Path):

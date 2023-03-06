@@ -9,7 +9,7 @@ from hydroshoot import io, model, initialisation
 from openalea.mtg import mtg
 from openalea.plantgl.all import Scene
 
-from example.common import build_mtg
+from archi_panel.simulator.common import build_mtg
 
 
 def preprocess_inputs(grapevine_mtg: mtg.MTG, path_project_dir: Path, psi_soil: float, gdd_since_budbreak: float,

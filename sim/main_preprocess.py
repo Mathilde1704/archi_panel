@@ -1,6 +1,6 @@
 from datetime import datetime
 from itertools import product
-from json import load, dump
+from json import dump
 from multiprocessing import Pool
 from pathlib import Path
 from typing import Iterable
@@ -10,6 +10,7 @@ from hydroshoot.architecture import mtg_save_geometry, save_mtg
 
 from archi_panel.simulator import initialisation_twins
 from archi_panel.utils import copy_mtg, extract_mtg
+from config import Config2021
 from example.common import build_mtg
 
 
@@ -79,18 +80,11 @@ def mp(sim_args: Iterable, nb_cpu: int = 2):
 
 
 if __name__ == '__main__':
-    path_root = Path(__file__).parent
-
-    path_digit_files = path_root.parent.resolve() / 'data/real_plants/digit/year_2021'
-
-    with open(path_root / 'params_default.json', mode='r') as f:
-        params_default = load(f)
-
-    path_preprocessed = path_root / 'preprocessed_data'
-    path_preprocessed.mkdir(parents=True, exist_ok=True)
+    path_root = Path(__file__).parent.resolve()
+    cfg = Config2021()
 
     time_on = datetime.now()
-    mp(sim_args=product([params_default], list(path_digit_files.iterdir()), [path_root.resolve()], [path_preprocessed]),
+    mp(sim_args=product([cfg.params], cfg.digit_files, [path_root.resolve()], [cfg.path_preprocessed_inputs]),
        nb_cpu=4)
     time_off = datetime.now()
     print(f"--- Total runtime: {(time_off - time_on).seconds} sec ---")

@@ -9,7 +9,6 @@ def build_mtg(path_file: Path, is_show_scene: bool = True) -> (mtg.MTG, Scene):
     grapevine_mtg = architecture.vine_mtg(file_path=path_file)
 
     for v in traversal.iter_mtg2(grapevine_mtg, grapevine_mtg.root):
-        architecture.vine_phyto_modular(grapevine_mtg, v)
         architecture.vine_mtg_properties(grapevine_mtg, v)
         architecture.vine_mtg_geometry(grapevine_mtg, v)
         architecture.vine_transform(grapevine_mtg, v)

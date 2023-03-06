@@ -13,12 +13,12 @@ from example.common import build_mtg
 
 
 def preprocess_inputs(grapevine_mtg: mtg.MTG, path_project_dir: Path, psi_soil: float, gdd_since_budbreak: float,
-                      scene: Scene):
+                      scene: Scene, user_params: dict = None):
     path_preprocessed_inputs = path_project_dir / 'preprocessed_inputs'
     path_preprocessed_inputs.mkdir(parents=True, exist_ok=True)
 
-    inputs = io.HydroShootInputs(g=grapevine_mtg, path_project=path_project_dir, scene=scene, psi_soil=psi_soil,
-                                 gdd_since_budbreak=gdd_since_budbreak)
+    inputs = io.HydroShootInputs(g=grapevine_mtg, path_project=path_project_dir, user_params=user_params,
+                                 scene=scene, psi_soil=psi_soil, gdd_since_budbreak=gdd_since_budbreak)
     io.verify_inputs(g=grapevine_mtg, inputs=inputs)
     grapevine_mtg = initialisation.init_model(g=grapevine_mtg, inputs=inputs)
 
@@ -26,7 +26,7 @@ def preprocess_inputs(grapevine_mtg: mtg.MTG, path_project_dir: Path, psi_soil: 
     static_data = {'form_factors': {s: grapevine_mtg.property(s) for s in ('ff_sky', 'ff_leaves', 'ff_soil')}}
     static_data.update({'Na': grapevine_mtg.property('Na')})
     with open(path_preprocessed_inputs / 'static.json', mode='w') as f_prop:
-        dump(static_data, f_prop)
+        dump(static_data, f_prop, indent=2)
     pass
 
     print("Computing 'dynamic' data...")
@@ -47,7 +47,7 @@ def preprocess_inputs(grapevine_mtg: mtg.MTG, path_project_dir: Path, psi_soil: 
             'Eabs': grapevine_mtg.property('Eabs')}})
 
     with open(path_preprocessed_inputs / 'dynamic.json', mode='w') as f_prop:
-        dump(dynamic_data, f_prop)
+        dump(dynamic_data, f_prop, indent=2)
     pass
 
 
@@ -71,6 +71,9 @@ if __name__ == '__main__':
         g=g,
         wd=path_project,
         scene=scene,
+        leaf_nitrogen=static_inputs['Na'],
+        form_factors=static_inputs['form_factors'],
+        leaf_ppfd=dynamic_inputs,
         psi_soil=-0.5,
         gdd_since_budbreak=100.,
         path_output=path_project / 'output' / 'time_series_with_preprocessed_data.csv')

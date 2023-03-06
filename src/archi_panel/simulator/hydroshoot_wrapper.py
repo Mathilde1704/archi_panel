@@ -13,13 +13,14 @@ from archi_panel.simulator import initialisation_twins
 from archi_panel.utils import copy_mtg, extract_mtg
 
 
-def run(g: MTG, wd: Path, plant_id: int = None, scene: Scene = None, is_write_result: bool = True,
+def run(g: MTG, wd: Path, params: dict = None, plant_id: int = None, scene: Scene = None, is_write_result: bool = True,
         is_write_mtg: bool = False, path_output: Path = None, **kwargs) -> DataFrame:
     """Calculates leaf gas and energy exchange in addition to the hydraulic structure of an individual plant.
 
     Args:
         g: mtg object
         wd: working directory
+        params: model params
         plant_id: plant identifier, if given, the mtg will only run for this plant (default None)
         scene: PlantGl scene (default None)
         is_write_result: if True then hourly plant-scale outputs are written into a CSV file
@@ -50,6 +51,7 @@ def run(g: MTG, wd: Path, plant_id: int = None, scene: Scene = None, is_write_re
     # ==============================================================================
     inputs = io.HydroShootInputs(
         path_project=wd,
+        user_params=params,
         scene=scene,
         is_nitrogen_calculated='Na' in g.property_names(),
         is_ppfd_interception_calculated='leaf_ppfd' in g.property_names(),

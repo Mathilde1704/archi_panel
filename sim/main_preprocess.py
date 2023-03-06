@@ -6,6 +6,7 @@ from pathlib import Path
 from typing import Iterable
 
 from hydroshoot import io
+from hydroshoot.architecture import mtg_save_geometry, save_mtg
 
 from archi_panel.simulator import initialisation_twins
 from archi_panel.utils import copy_mtg, extract_mtg
@@ -15,6 +16,7 @@ from example.common import build_mtg
 def run_preprocess(params: dict, path_digit: Path, path_project: Path, path_preprocessed_inputs: Path):
     id_mtg = path_digit.stem
     g, scene = build_mtg(path_file=path_digit, is_show_scene=False)
+    mtg_save_geometry(scene=scene, file_path=path_preprocessed_inputs, index=f'_{id_mtg}')
 
     print("Computing 'static' data...")
 
@@ -38,29 +40,31 @@ def run_preprocess(params: dict, path_digit: Path, path_project: Path, path_prep
     with open(path_preprocessed_inputs / f'{id_mtg}_static.json', mode='w') as f_prop:
         dump(static_data, f_prop, indent=2)
 
-    # print("Computing 'dynamic' data...")
-    # dynamic_data = {}
-    #
-    # inputs_hourly = io.HydroShootHourlyInputs(psi_soil=inputs.psi_soil_forced, sun2scene=inputs.sun2scene)
-    #
-    # params = inputs.params
-    # for date in params.simulation.date_range:
-    #     print("=" * 72)
-    #     print(f'Date: {date}\n')
-    #
-    #     inputs_hourly.update(g=g, date_sim=date, hourly_weather=inputs.weather[inputs.weather.index == date],
-    #                          psi_pd=inputs.psi_pd, params=params)
-    #
-    #     g, diffuse_to_total_irradiance_ratio = initialisation_twins.init_hourly(
-    #         g=g, g_clone=g_clone, inputs_hourly=inputs_hourly, leaf_ppfd=inputs.leaf_ppfd, params=params)
-    #
-    #     dynamic_data.update({g.date: {
-    #         'diffuse_to_total_irradiance_ratio': diffuse_to_total_irradiance_ratio,
-    #         'Ei': g.property('Ei'),
-    #         'Eabs': g.property('Eabs')}})
-    #
-    # with open(path_preprocessed_inputs / f'{id_mtg}_dynamic.json', mode='w') as f_prop:
-    #     dump(dynamic_data, f_prop, indent=2)
+    save_mtg(g=g, scene=scene, file_path=path_preprocessed_inputs, filename=f'initial_mtg_{id_mtg}.pckl')
+
+    print("Computing 'dynamic' data...")
+    dynamic_data = {}
+
+    inputs_hourly = io.HydroShootHourlyInputs(psi_soil=inputs.psi_soil_forced, sun2scene=inputs.sun2scene)
+
+    params = inputs.params
+    for date in params.simulation.date_range:
+        print("=" * 72)
+        print(f'Date: {date}\n')
+
+        inputs_hourly.update(g=g, date_sim=date, hourly_weather=inputs.weather[inputs.weather.index == date],
+                             psi_pd=inputs.psi_pd, params=params)
+
+        g, diffuse_to_total_irradiance_ratio = initialisation_twins.init_hourly(
+            g=g, g_clone=g_clone, inputs_hourly=inputs_hourly, leaf_ppfd=inputs.leaf_ppfd, params=params)
+
+        dynamic_data.update({g.date: {
+            'diffuse_to_total_irradiance_ratio': diffuse_to_total_irradiance_ratio,
+            'Ei': g.property('Ei'),
+            'Eabs': g.property('Eabs')}})
+
+    with open(path_preprocessed_inputs / f'{id_mtg}_dynamic.json', mode='w') as f_prop:
+        dump(dynamic_data, f_prop, indent=2)
 
     pass
 
@@ -77,7 +81,7 @@ def mp(sim_args: Iterable, nb_cpu: int = 2):
 if __name__ == '__main__':
     path_root = Path(__file__).parent
 
-    path_digit_files = path_root.parent / 'data/real_plants/digit/year_2021'
+    path_digit_files = path_root.parent.resolve() / 'data/real_plants/digit/year_2021'
 
     with open(path_root / 'params_default.json', mode='r') as f:
         params_default = load(f)

@@ -5,19 +5,19 @@ from multiprocessing import Pool
 from pathlib import Path
 from typing import Iterable
 
-from hydroshoot import io
+from hydroshoot import io, display
 from hydroshoot.architecture import mtg_save_geometry, save_mtg
+from openalea.plantgl.scenegraph import Scene
 
 from archi_panel.simulator import initialisation_twins
+from archi_panel.simulator.common import build_mtg
 from archi_panel.utils import copy_mtg, extract_mtg
 from config import Config2021
-from archi_panel.simulator.common import build_mtg
 
 
 def run_preprocess(params: dict, path_digit: Path, path_project: Path, path_preprocessed_inputs: Path):
     id_mtg = path_digit.stem
     g, scene = build_mtg(path_file=path_digit, is_show_scene=False)
-    mtg_save_geometry(scene=scene, file_path=path_preprocessed_inputs, index=f'_{id_mtg}')
 
     print("Computing 'static' data...")
 
@@ -41,7 +41,10 @@ def run_preprocess(params: dict, path_digit: Path, path_project: Path, path_prep
     with open(path_preprocessed_inputs / f'{id_mtg}_static.json', mode='w') as f_prop:
         dump(static_data, f_prop, indent=2)
 
-    save_mtg(g=g, scene=scene, file_path=path_preprocessed_inputs, filename=f'initial_mtg_{id_mtg}.pckl')
+    scene_single = display.visu(g, def_elmnt_color_dict=True, scene=Scene(), view_result=False)
+
+    mtg_save_geometry(scene=scene_single, file_path=path_preprocessed_inputs, index=f'_{id_mtg}')
+    save_mtg(g=g, scene=scene_single, file_path=path_preprocessed_inputs, filename=f'initial_mtg_{id_mtg}.pckl')
 
     print("Computing 'dynamic' data...")
     dynamic_data = {}

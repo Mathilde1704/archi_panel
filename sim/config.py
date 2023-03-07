@@ -13,6 +13,9 @@ class Config2021:
         self.path_params = path_root / 'params_default.json'
 
         self.digit_files = list(self.path_digit_files.iterdir())
+        self.digit_ids = [s.stem for s in self.digit_files]
+
+        self.path_outputs_dir = path_root / 'outputs'
 
         with open(self.path_params, mode='r') as f:
             self.params = load(f)

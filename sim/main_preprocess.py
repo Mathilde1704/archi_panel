@@ -12,7 +12,7 @@ from openalea.plantgl.scenegraph import Scene
 from archi_panel.simulator import initialisation_twins
 from archi_panel.simulator.common import build_mtg
 from archi_panel.utils import copy_mtg, extract_mtg
-from config import Config2021
+from config import ConfigSim
 
 
 def run_preprocess(params: dict, path_digit: Path, path_project: Path, path_preprocessed_inputs: Path):
@@ -84,10 +84,12 @@ def mp(sim_args: Iterable, nb_cpu: int = 2):
 
 if __name__ == '__main__':
     path_root = Path(__file__).parent.resolve()
-    cfg = Config2021()
 
-    time_on = datetime.now()
-    mp(sim_args=product([cfg.params], cfg.digit_files, [path_root.resolve()], [cfg.path_preprocessed_inputs]),
-       nb_cpu=4)
-    time_off = datetime.now()
-    print(f"--- Total runtime: {(time_off - time_on).seconds} sec ---")
+    for year in (2021, 2022):
+        cfg = ConfigSim(year=year)
+
+        time_on = datetime.now()
+        mp(sim_args=product([cfg.params], cfg.digit_files, [path_root.resolve()], [cfg.path_preprocessed_inputs]),
+           nb_cpu=6)
+        time_off = datetime.now()
+        print(f"--- Total runtime: {(time_off - time_on).seconds} sec ---")

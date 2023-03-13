@@ -8,7 +8,7 @@ from typing import Iterable
 from hydroshoot.architecture import load_mtg
 
 from archi_panel.simulator import hydroshoot_wrapper
-from config import Config2021
+from config import ConfigSim
 
 
 def run_hydroshoot(params: dict, path_preprocessed_dir: Path, id_digit: str, path_output_dir: Path):
@@ -51,7 +51,7 @@ def mp(sim_args: Iterable, nb_cpu: int = 2):
 
 
 if __name__ == '__main__':
-    cfg = Config2021()
+    cfg = ConfigSim(year=2021)
 
     time_on = datetime.now()
     mp(sim_args=product([cfg.params], [cfg.path_preprocessed_inputs], cfg.digit_ids, [cfg.path_outputs_dir]),

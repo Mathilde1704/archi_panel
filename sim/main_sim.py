@@ -51,10 +51,11 @@ def mp(sim_args: Iterable, nb_cpu: int = 2):
 
 
 if __name__ == '__main__':
-    cfg = ConfigSim(year=2021)
+    for year in (2021, 2022):
+        cfg = ConfigSim(year=year)
 
-    time_on = datetime.now()
-    mp(sim_args=product([cfg.params], [cfg.path_preprocessed_inputs], cfg.digit_ids, [cfg.path_outputs_dir]),
-       nb_cpu=12)
-    time_off = datetime.now()
-    print(f"--- Total runtime: {(time_off - time_on).seconds} sec ---")
+        time_on = datetime.now()
+        mp(sim_args=product([cfg.params], [cfg.path_preprocessed_inputs], cfg.digit_ids, [cfg.path_outputs_dir]),
+           nb_cpu=12)
+        time_off = datetime.now()
+        print(f"--- Total runtime: {(time_off - time_on).seconds} sec ---")

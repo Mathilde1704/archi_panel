@@ -18,4 +18,8 @@ class ConfigSim:
         self.path_outputs_dir = path_root / f'outputs/{year:.0f}'
 
         with open(self.path_params, mode='r') as f:
-            self.params = load(f)
+            params = load(f)
+        params['simulation']['sdate'] = params['simulation']['sdate'].replace('2021-', f'{year}-')
+        params['simulation']['edate'] = params['simulation']['edate'].replace('2021-', f'{year}-')
+        params['phenology']['emdate'] = params['phenology']['emdate'].replace('2021-', f'{year}-')
+        self.params = params

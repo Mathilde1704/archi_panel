@@ -11,7 +11,8 @@ from archi_panel.simulator import hydroshoot_wrapper
 from config import ConfigSim
 
 
-def run_hydroshoot(params: dict, path_preprocessed_dir: Path, id_digit: str, path_output_dir: Path):
+def run_hydroshoot(params: dict, path_preprocessed_dir: Path, id_digit: str, path_output_dir: Path,
+                   is_constant_nitrogen: bool = False):
     g, scene = load_mtg(
         path_mtg=str(path_preprocessed_dir / f'initial_mtg_{id_digit}.pckl'),
         path_geometry=str(path_preprocessed_dir / f'geometry_{id_digit}.bgeom'))
@@ -21,7 +22,12 @@ def run_hydroshoot(params: dict, path_preprocessed_dir: Path, id_digit: str, pat
     with open(path_preprocessed_dir / f'{id_digit}_dynamic.json') as f:
         dynamic_inputs = load(f)
 
-    path_output = path_output_dir / id_digit
+    if is_constant_nitrogen:
+        static_inputs['Na'] = {k: 2.2 for k in static_inputs['Na'].keys()}
+        path_output = path_output_dir / 'cst_nitrogen' / id_digit
+    else:
+        path_output = path_output_dir / id_digit
+
     path_output.mkdir(parents=True, exist_ok=True)
 
     hydroshoot_wrapper.run(
@@ -53,9 +59,11 @@ def mp(sim_args: Iterable, nb_cpu: int = 2):
 if __name__ == '__main__':
     for year in (2021, 2022):
         cfg = ConfigSim(year=year)
+        is_cst_n = True
 
         time_on = datetime.now()
-        mp(sim_args=product([cfg.params], [cfg.path_preprocessed_inputs], cfg.digit_ids, [cfg.path_outputs_dir]),
+        mp(sim_args=product(
+            [cfg.params], [cfg.path_preprocessed_inputs], cfg.digit_ids, [cfg.path_outputs_dir], [is_cst_n]),
            nb_cpu=12)
         time_off = datetime.now()
         print(f"--- Total runtime: {(time_off - time_on).seconds} sec ---")

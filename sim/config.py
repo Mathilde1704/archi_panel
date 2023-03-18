@@ -23,3 +23,5 @@ class ConfigSim:
         params['simulation']['edate'] = params['simulation']['edate'].replace('2021-', f'{year}-')
         params['phenology']['emdate'] = params['phenology']['emdate'].replace('2021-', f'{year}-')
         self.params = params
+
+        self.constant_nitrogen_content = 2.2

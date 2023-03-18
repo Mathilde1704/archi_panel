@@ -46,15 +46,13 @@ def calc_leaf_azimuth(node: _ProxyNode) -> float:
     return degrees(angle_from_south if delta_y <= 0 else - angle_from_south)
 
 
-def concatenate_time_series(pth_root: Path):
-    df_weather = read_csv(pth_root.parent / 'data/weather.csv',
+def concatenate_time_series(pth_outputs: Path):
+    df_weather = read_csv(pth_outputs.parents[2] / 'data/weather.csv',
                           sep=';', decimal='.', parse_dates=['time'], index_col='time')
 
     dfs = []
     for year in (2021, 2022):
-        cfg = ConfigSim(year=year)
-
-        for pth in cfg.path_outputs_dir.iterdir():
+        for pth in (pth_outputs / f'{year:.0f}').iterdir():
             df = read_csv(pth / 'time_series.csv', sep=';', decimal='.')
             df.loc[:, 'id_digit'] = pth.stem
             df.rename(columns={'Unnamed: 0': 'time'}, inplace=True)
@@ -65,11 +63,11 @@ def concatenate_time_series(pth_root: Path):
 
     df_total = concat(dfs)
     df_total['dTc_air'] = df_total['Tleaf'] - df_total['Tair']
-    df_total.to_csv(pth_root / 'outputs/time_series_all.csv', sep=';', decimal='.', index=False)
+    df_total.to_csv(pth_outputs / 'time_series_all.csv', sep=';', decimal='.', index=False)
     pass
 
 
-def get_mockups_summary(pth_root: Path):
+def get_mockups_summary(pth_root: Path, is_cst_nitrogen: bool):
     dfs = []
     for year in (2021, 2022):
         cfg = ConfigSim(year=year)
@@ -77,8 +75,10 @@ def get_mockups_summary(pth_root: Path):
         for i, id_digit in enumerate(cfg.digit_ids):
             with open(path_preprocessed_dir / f'{id_digit}_static.json') as f:
                 static_data = load(f)
-
-            nitrogen_content = list(static_data['Na'].values())
+            if is_cst_nitrogen:
+                nitrogen_content = [cfg.constant_nitrogen_content] * len(static_data['Na'].values())
+            else:
+                nitrogen_content = list(static_data['Na'].values())
 
             g, scene = load_mtg(
                 path_mtg=str(path_preprocessed_dir / f'initial_mtg_{id_digit}.pckl'),
@@ -110,11 +110,16 @@ def get_mockups_summary(pth_root: Path):
                 index=[i]))
 
     df_total = concat(dfs)
-    df_total.to_csv(pth_root / 'outputs/summary.csv', sep=';', decimal='.', index=False)
+    df_total.to_csv(pth_root / f"outputs/{'nitrogen_constant' if is_cst_nitrogen else 'nitrogen_variable'}/summary.csv",
+                    sep=';', decimal='.', index=False)
     pass
 
 
 if __name__ == '__main__':
     path_root = Path(__file__).parent
-    concatenate_time_series(pth_root=path_root)
-    get_mockups_summary(pth_root=path_root)
+    is_constant_nitrogen = True
+
+    path_outputs = path_root / 'outputs' / ('nitrogen_variable' if is_constant_nitrogen else 'nitrogen_constant')
+
+    concatenate_time_series(pth_outputs=path_outputs)
+    get_mockups_summary(pth_root=path_root, is_cst_nitrogen=is_constant_nitrogen)

@@ -67,30 +67,30 @@ def run_preprocess(path_digit: Path, params_architecture: dict, path_preprocesse
     architecture.mtg_save_geometry(scene=pgl_scene, file_path=path_preprocessed)
     architecture.save_mtg(g=grapevine_mtg, scene=pgl_scene, file_path=path_preprocessed, filename=f'initial_mtg.pckl')
 
-    # print("Computing 'dynamic' data...")
-    # dynamic_data = {}
-    # inputs_hourly = io.HydroShootHourlyInputs(psi_soil=inputs.psi_soil_forced, sun2scene=inputs.sun2scene)
-    # for date_sim in inputs.params.simulation.date_range:
-    #     inputs_hourly.update(
-    #         g=grapevine_mtg,
-    #         date_sim=date_sim,
-    #         hourly_weather=inputs.weather[inputs.weather.index == date_sim],
-    #         psi_pd=inputs.psi_pd,
-    #         params=inputs.params)
-    #
-    #     grapevine_mtg, diffuse_to_total_irradiance_ratio = initialisation.init_hourly(
-    #         g=grapevine_mtg,
-    #         inputs_hourly=inputs_hourly,
-    #         leaf_ppfd=inputs.leaf_ppfd,
-    #         params=inputs.params)
-    #
-    #     dynamic_data.update({grapevine_mtg.date: {
-    #         'diffuse_to_total_irradiance_ratio': diffuse_to_total_irradiance_ratio,
-    #         'Ei': grapevine_mtg.property('Ei'),
-    #         'Eabs': grapevine_mtg.property('Eabs')}})
-    #
-    # with open(path_preprocessed / f'dynamic.json', mode='w') as f_prop:
-    #     dump(dynamic_data, f_prop, indent=2)
+    print("Computing 'dynamic' data...")
+    dynamic_data = {}
+    inputs_hourly = io.HydroShootHourlyInputs(psi_soil=inputs.psi_soil_forced, sun2scene=inputs.sun2scene)
+    for date_sim in inputs.params.simulation.date_range:
+        inputs_hourly.update(
+            g=grapevine_mtg,
+            date_sim=date_sim,
+            hourly_weather=inputs.weather[inputs.weather.index == date_sim],
+            psi_pd=inputs.psi_pd,
+            params=inputs.params)
+
+        grapevine_mtg, diffuse_to_total_irradiance_ratio = initialisation.init_hourly(
+            g=grapevine_mtg,
+            inputs_hourly=inputs_hourly,
+            leaf_ppfd=inputs.leaf_ppfd,
+            params=inputs.params)
+
+        dynamic_data.update({grapevine_mtg.date: {
+            'diffuse_to_total_irradiance_ratio': diffuse_to_total_irradiance_ratio,
+            'Ei': grapevine_mtg.property('Ei'),
+            'Eabs': grapevine_mtg.property('Eabs')}})
+
+    with open(path_preprocessed / f'dynamic.json', mode='w') as f_prop:
+        dump(dynamic_data, f_prop, indent=2)
     pass
 
 

@@ -19,9 +19,18 @@ class ConfigSim:
 
         with open(self.path_params, mode='r') as f:
             params = load(f)
-        params['simulation']['sdate'] = params['simulation']['sdate'].replace('2021-', f'{year}-')
-        params['simulation']['edate'] = params['simulation']['edate'].replace('2021-', f'{year}-')
-        params['phenology']['emdate'] = params['phenology']['emdate'].replace('2021-', f'{year}-')
+        if year == 2021:
+            date_beg = '2021-08-10 00:00:00'
+            date_end = '2021-08-19 00:00:00'
+            date_budburst = '2021-04-10 00:00:00'
+        else:
+            date_beg = '2022-07-19 00:00:00'
+            date_end = '2022-07-28 23:00:00'
+            date_budburst = '2022-04-10 00:00:00'
+
+        params['simulation']['sdate'] = date_beg
+        params['simulation']['edate'] = date_end
+        params['phenology']['emdate'] = date_budburst
         self.params = params
 
         self.constant_nitrogen_content = 2.2

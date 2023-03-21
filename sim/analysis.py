@@ -119,7 +119,7 @@ if __name__ == '__main__':
     path_root = Path(__file__).parent
     is_constant_nitrogen = True
 
-    path_outputs = path_root / 'outputs' / ('nitrogen_variable' if is_constant_nitrogen else 'nitrogen_constant')
+    path_outputs = path_root / 'outputs' / ('nitrogen_constant' if is_constant_nitrogen else 'nitrogen_variable')
 
     concatenate_time_series(pth_outputs=path_outputs)
     get_mockups_summary(pth_root=path_root, is_cst_nitrogen=is_constant_nitrogen)

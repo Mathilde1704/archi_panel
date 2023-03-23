@@ -13,14 +13,14 @@ from pandas import read_csv
 from config import ConfigSimVSP
 
 
-def build_mtg(path_digit: Path, a_L: float, b_L: float, leaf_inc: float, lim_max: float, lim_min: float) -> tuple:
+def build_mtg(path_digit: Path, a_L: float, b_L: float, leaf_inc: float, lim_max: float) -> tuple:
     mtg_vine = architecture.vine_mtg(path_digit)
 
     for v in traversal.iter_mtg2(mtg_vine, mtg_vine.root):
         architecture.vine_phyto_modular(mtg_vine, v)
         architecture.vine_axeII(mtg_vine, v, a_L=a_L, b_L=b_L)
         architecture.vine_petiole(mtg_vine, v)
-        architecture.vine_leaf(mtg_vine, v, leaf_inc=leaf_inc, lim_max=lim_max, lim_min=lim_min)
+        architecture.vine_leaf(mtg_vine, v, leaf_inc=leaf_inc, lim_max=lim_max)
         architecture.vine_mtg_properties(mtg_vine, v)
         architecture.vine_mtg_geometry(mtg_vine, v)
         architecture.vine_transform(mtg_vine, v)
@@ -38,8 +38,7 @@ def run_preprocess(path_digit: Path, params_architecture: dict, path_preprocesse
         a_L=params_architecture['a_L'],
         b_L=params_architecture['b_L'],
         leaf_inc=params_architecture['leaf_inc'],
-        lim_max=params_architecture['lim_max'],
-        lim_min=params_architecture['lim_min'])
+        lim_max=params_architecture['lim_max'])
 
     path_preprocessed = path_preprocessed_dir / f'combi_{id_sim}'
     path_preprocessed.mkdir(parents=True, exist_ok=True)

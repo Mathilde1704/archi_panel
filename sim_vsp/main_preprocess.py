@@ -18,7 +18,7 @@ def build_mtg(path_digit: Path, a_L: float, b_L: float, leaf_inc: float, lim_max
 
     for v in traversal.iter_mtg2(mtg_vine, mtg_vine.root):
         architecture.vine_phyto_modular(mtg_vine, v)
-        architecture.vine_axeII(mtg_vine, v, a_L=a_L, b_L=b_L)
+        architecture.vine_axeII(mtg_vine, v, a_L=a_L, b_L=b_L, ci_nfii=0)
         architecture.vine_petiole(mtg_vine, v)
         architecture.vine_leaf(mtg_vine, v, leaf_inc=leaf_inc, lim_max=lim_max)
         architecture.vine_mtg_properties(mtg_vine, v)

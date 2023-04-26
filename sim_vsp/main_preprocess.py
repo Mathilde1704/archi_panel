@@ -49,6 +49,7 @@ def run_preprocess(path_digit: Path, params_architecture: dict, path_preprocesse
     inputs = io.HydroShootInputs(
         g=grapevine_mtg,
         path_project=path_preprocessed_dir,
+        path_weather=path_weather,
         user_params=user_params,
         scene=pgl_scene,
         psi_soil=-0.01)

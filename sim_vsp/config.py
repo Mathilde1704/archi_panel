@@ -16,3 +16,4 @@ class ConfigSimVSP:
 
         self.path_outputs = self.path_preprocessed_inputs.parent / f'outputs'
         self.constant_nitrogen_content = 2.2
+        self.path_weather = path_root.parent / 'data/weather.csv'

@@ -11,24 +11,29 @@ from config import ConfigSimVSP
 from main_preprocess import get_architectural_params
 
 
-def run_hydroshoot(params: dict, path_preprocessed_dir: Path, id_sim: int, path_output_dir: Path):
+def run_hydroshoot(path_weather: Path, params: dict, path_preprocessed_dir: Path, id_sim: int, path_output_dir: Path,
+                   date_info: tuple):
     path_preprocessed = path_preprocessed_dir / f'combi_{id_sim}'
+
+    params['simulation'].update({'sdate': date_info[1]})
+    params['simulation'].update({'edate': date_info[1]})
 
     g, scene = architecture.load_mtg(
         path_mtg=str(path_preprocessed / 'initial_mtg.pckl'),
         path_geometry=str(path_preprocessed / 'geometry.bgeom'))
 
-    with open(path_preprocessed / f'static.json') as f:
+    with open(path_preprocessed / 'static.json') as f:
         static_inputs = load(f)
-    with open(path_preprocessed / f'dynamic.json') as f:
+    with open(path_preprocessed / f'dynamic_{date_info[0]}.json') as f:
         dynamic_inputs = load(f)
 
-    path_output = path_output_dir / f'combi_{id_sim}'
+    path_output = path_output_dir / date_info[0] / f'combi_{id_sim}'
     path_output.mkdir(parents=True, exist_ok=True)
 
     model.run(
         g=g,
         wd=path_preprocessed_dir.parent,
+        path_weather=path_weather,
         params=params,
         scene=scene,
         write_result=True,
@@ -54,9 +59,11 @@ if __name__ == '__main__':
     path_root = Path(__file__).parent
     cfg = ConfigSimVSP()
 
-    ids = [v['id'] for v in get_architectural_params(cfg.path_params_architecture)]
+    ids = sorted([v['id'] for v in get_architectural_params(cfg.path_params_architecture)])
 
     time_on = datetime.now()
-    mp(sim_args=product([cfg.params], [cfg.path_preprocessed_inputs], ids, [cfg.path_outputs]), nb_cpu=1)
+    mp(sim_args=product(
+        [cfg.path_weather], [cfg.params], [cfg.path_preprocessed_inputs], ids, [cfg.path_outputs], cfg.dates),
+        nb_cpu=12)
     time_off = datetime.now()
     print(f"--- Total runtime: {(time_off - time_on).seconds} sec ---")

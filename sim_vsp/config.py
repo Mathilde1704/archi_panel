@@ -17,3 +17,5 @@ class ConfigSimVSP:
         self.path_outputs = self.path_preprocessed_inputs.parent / f'outputs'
         self.constant_nitrogen_content = 2.2
         self.path_weather = path_root.parent / 'data/weather.csv'
+        self.dates = [('clear_sky', "2022-07-11 13:00:00"),
+                      ('cloudy_sky', "2021-07-12 13:00:00")]

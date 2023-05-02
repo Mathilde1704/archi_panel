@@ -139,3 +139,4 @@ misc/
 sim/project_mathilde_fspm
 sim_vsp/preprocessed_data
 sim_vsp/outputs
+script/*.png

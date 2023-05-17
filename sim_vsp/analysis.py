@@ -73,8 +73,6 @@ def get_all_leaf_props(path_data: Path, mtg_index: str) -> None:
         for s in ('TopPosition', 'BotPosition', 'Length', 'Na', 'ff_sky', 'ff_leaves', 'ff_soil', 'Flux', 'Vcm25',
                   'Jm25', 'TPU25', 'Rd', 'u', 'Eabs', 'psi_head', 'gbH', 'Tlc', 'An', 'gs', 'gb', 'E', 'leaf_area'):
             res.update({s: [g.node(i).properties()[s] for i in ids]})
-            DataFrame(res).to_csv(r'C:\Users\albashar\Documents\dvp\archi_panel\sim_vsp\summary_temperature_tot.csv',
-                                  sep=';', decimal='.', index=False)
             DataFrame(res).to_csv(path_data / f'summary_props_{pth.name}.csv', sep=';', decimal='.', index=False)
 
     pass

@@ -11,6 +11,9 @@ from config import ConfigSimVSP
 from main_preprocess import get_architectural_params
 
 
+def str2str(s: str) -> str:
+    return s.replace('-', '').replace(':', '').replace(' ', '')
+
 def run_hydroshoot(path_weather: Path, params: dict, path_preprocessed_dir: Path, id_sim: int, path_output_dir: Path,
                    date_info: tuple):
     path_preprocessed = path_preprocessed_dir / f'combi_{id_sim}'

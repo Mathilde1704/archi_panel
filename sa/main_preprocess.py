@@ -7,7 +7,8 @@ from typing import Iterable, Callable
 
 from hydroshoot import architecture, io, initialisation
 
-from sa import config, funcs
+import config
+import funcs
 
 
 def create_mockup(path_digit: Path, params_architecture: dict, path_preprocessed_dir: Path):
@@ -137,7 +138,7 @@ if __name__ == '__main__':
     params = config.Params()
     is_nitrogen_cst = True
 
-    params_archi = params.combinations[:5]
+    params_archi = params.combinations
 
     time_on = datetime.now()
     mp(sim_args=product([params.path_reference_digit], params_archi, [cfg.path_preprocessed_inputs]),

@@ -54,7 +54,7 @@ def build_mtg2(path_digit: Path, leaf_inc: float, lim_max: float, scale: float =
         architecture.vine_mtg_geometry(mtg_vine, v)
         architecture.vine_transform(mtg_vine, v)
 
-    scene_pgl = display.visu(mtg_vine, def_elmnt_color_dict=True, scene=Scene(), view_result=True)
+    scene_pgl = display.visu(mtg_vine, def_elmnt_color_dict=True, scene=Scene(), view_result=False)
 
     return mtg_vine, scene_pgl
 

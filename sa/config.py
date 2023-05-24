@@ -12,7 +12,7 @@ class ConfigSensitivityAnalysis:
         path_root = Path(__file__).parent.resolve()
         path_relative = '../../../../mnt/data/hydroshoot/project_mathilde_fspm/sa' if is_on_remote else ''
 
-        self.path_preprocessed_inputs = path_root / ''.join((path_relative, 'preprocessed_inputs'))
+        self.path_preprocessed_inputs = path_root / '/'.join((path_relative, 'preprocessed_inputs'))
         self.path_preprocessed_inputs.mkdir(parents=True, exist_ok=True)
 
 

@@ -11,7 +11,7 @@ import config
 import funcs
 
 
-def create_mockup(path_digit: Path, params_architecture: dict, path_preprocessed_dir: Path):
+def create_mockup(path_digit: Path, params_architecture: tuple, path_preprocessed_dir: Path):
     sim_id, internode_scale, limb_inclination, midrib_length = params_architecture
 
     path_preprocessed = path_preprocessed_dir / f'combi_{sim_id}'
@@ -28,7 +28,7 @@ def create_mockup(path_digit: Path, params_architecture: dict, path_preprocessed
     pass
 
 
-def preprocess_static(path_weather: Path, params_architecture: dict, path_preprocessed_dir: Path,
+def preprocess_static(path_weather: Path, params_architecture: tuple, path_preprocessed_dir: Path,
                       user_params: dict, nitrogen_content: float = None):
     sim_id, internode_scale, limb_inclination, midrib_length = params_architecture
 

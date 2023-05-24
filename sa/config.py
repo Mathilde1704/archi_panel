@@ -1,5 +1,6 @@
 from collections import namedtuple
 from itertools import product
+from json import load
 from pathlib import Path
 
 from numpy import linspace
@@ -14,6 +15,11 @@ class ConfigSensitivityAnalysis:
 
         self.path_preprocessed_inputs = path_root / '/'.join((path_relative, 'preprocessed_inputs'))
         self.path_preprocessed_inputs.mkdir(parents=True, exist_ok=True)
+
+        self.path_weather = path_root.parent / 'data/weather.csv'
+        self.constant_nitrogen_content = 2.2
+        with open(path_root / 'params.json', mode='r') as f:
+            self.params = load(f)
 
 
 class Params:

@@ -11,9 +11,9 @@ from funcs import calc_reference_mtg_internode_length
 class ConfigSensitivityAnalysis:
     def __init__(self, is_on_remote: bool):
         path_root = Path(__file__).parent.resolve()
-        path_relative = '../../../../mnt/data/hydroshoot/project_mathilde_fspm/sa' if is_on_remote else ''
+        path_relative = '../../../../mnt/data/hydroshoot/project_mathilde_fspm/sa/' if is_on_remote else ''
 
-        self.path_preprocessed_inputs = path_root / '/'.join((path_relative, 'preprocessed_inputs'))
+        self.path_preprocessed_inputs = path_root / ''.join((path_relative, 'preprocessed_inputs'))
         self.path_preprocessed_inputs.mkdir(parents=True, exist_ok=True)
 
         self.path_weather = path_root.parent / 'data/weather.csv'

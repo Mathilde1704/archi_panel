@@ -72,8 +72,8 @@ def preprocess_dynamic(path_weather: Path, params_architecture: dict, path_prepr
     print("Computing 'dynamic' data...")
     path_preprocessed = path_preprocessed_dir / f'combi_{sim_id}'
 
-    user_params['simulation'].update({'sdate': date_info[1]})
-    user_params['simulation'].update({'edate': date_info[1]})
+    user_params['simulation'].update({'sdate': f"{date_info[1]} 00:00:00"})
+    user_params['simulation'].update({'edate': f"{date_info[1]} 23:00:00"})
 
     grapevine_mtg, pgl_scene = architecture.load_mtg(
         path_mtg=str(path_preprocessed / 'initial_mtg.pckl'),

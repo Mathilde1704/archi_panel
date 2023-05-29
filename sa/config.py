@@ -20,6 +20,8 @@ class ConfigSensitivityAnalysis:
         self.constant_nitrogen_content = 2.2
         with open(path_root / 'params.json', mode='r') as f:
             self.params = load(f)
+        self.dates = [('clear_sky', "2022-07-11"),
+                      ('cloudy_sky', "2021-07-12")]
 
 
 class Params:

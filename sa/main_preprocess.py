@@ -92,6 +92,7 @@ def preprocess_dynamic(path_weather: Path, params_architecture: dict, path_prepr
     dynamic_data = {}
     inputs_hourly = io.HydroShootHourlyInputs(psi_soil=inputs.psi_soil_forced, sun2scene=inputs.sun2scene)
     for date_sim in inputs.params.simulation.date_range:
+        print(date_sim)
         inputs_hourly.update(
             g=grapevine_mtg,
             date_sim=date_sim,

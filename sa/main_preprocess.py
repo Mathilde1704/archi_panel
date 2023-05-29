@@ -149,7 +149,7 @@ if __name__ == '__main__':
                         [cfg.params], [cfg.constant_nitrogen_content if is_nitrogen_cst else None]),
        func=run_preprocess_static,
        nb_cpu=12)
-    mp(sim_args=product([cfg.path_weather], params_archi, [cfg.path_preprocessed_inputs], [cfg.params], [cfg.dates]),
+    mp(sim_args=product([cfg.path_weather], params_archi, [cfg.path_preprocessed_inputs], [cfg.params], cfg.dates),
        func=run_preprocess_dynamic,
        nb_cpu=12)
     time_off = datetime.now()

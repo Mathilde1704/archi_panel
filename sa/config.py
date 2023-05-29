@@ -22,6 +22,7 @@ class ConfigSensitivityAnalysis:
             self.params = load(f)
         self.dates = [('clear_sky', "2022-07-11"),
                       ('cloudy_sky', "2021-07-12")]
+        self.path_outputs = self.path_preprocessed_inputs.parent / f'outputs'
 
 
 class Params:

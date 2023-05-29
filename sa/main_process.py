@@ -16,8 +16,8 @@ def run_hydroshoot(path_weather: Path, user_params: dict, path_preprocessed_dir:
 
     path_preprocessed = path_preprocessed_dir / f'combi_{id_sim}'
 
-    user_params['simulation'].update({'sdate': date_info[1]})
-    user_params['simulation'].update({'edate': date_info[1]})
+    user_params['simulation'].update({'sdate': f"{date_info[1]} 00:00:00"})
+    user_params['simulation'].update({'edate': f"{date_info[1]} 23:00:00"})
 
     g, scene = architecture.load_mtg(
         path_mtg=str(path_preprocessed / 'initial_mtg.pckl'),

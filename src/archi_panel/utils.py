@@ -32,3 +32,31 @@ def extract_mtg(g: MTG, plant_id: int) -> MTG:
         trim_mtg(g=g_single, vtx_id=vid)
 
     return g_single
+
+
+def print_progress_bar(iteration: int, total: int, prefix: str = '', suffix: str = '', decimals: int = 1,
+                       length: int = 100, fill: str = '█', print_end: str = "\r"):
+    """Call in a loop to create terminal progress bar
+
+    Args:
+        iteration: current iteration
+        total: total iterations
+        prefix: prefix string
+        suffix: suffix string
+        decimals: positive number of decimals in percent complete
+        length: character length of bar
+        fill: bar fill character
+        print_end: end character (e.g. "\r", "\r\n")
+
+    References:
+        https://stackoverflow.com/questions/3173320/text-progress-bar-in-terminal-with-block-characters
+    """
+    percent = ("{0:." + str(decimals) + "f}").format(100 * (iteration / float(total)))
+    filled_length = int(length * iteration // total)
+    bar = fill * filled_length + '-' * (length - filled_length)
+    print(f'\r{prefix} |{bar}| {percent}% {suffix}', end=print_end)
+    # Print New Line on Complete
+    if iteration == total:
+        print()
+
+    pass

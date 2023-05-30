@@ -21,8 +21,10 @@ def verify_identical_leaf_number(path_preprocessed_inputs: Path, combis: list):
 
 def concat_time_series(path_outputs: Path, sky_cond: str, params: Params):
     dfs = []
-    for combi in params.combinations:
+    nb_combis = len(params.combinations)
+    for i, combi in enumerate(params.combinations):
         id_combi, internode_scale, limb_inclination, midrib_length = combi
+        print_progress_bar(iteration=i, total=nb_combis)
         df = read_csv(path_outputs / f'{sky_cond}/combi_{id_combi}/time_series.csv', sep=';', decimal='.')
         df.loc[:, 'combi'] = id_combi
         df.loc[:, 'len'] = params.internode_length.bins[list(params.internode_scale.bins).index(internode_scale)]

@@ -2,6 +2,7 @@ from pathlib import Path
 from pickle import load as load_pickle
 
 from hydroshoot.architecture import load_mtg, get_leaves
+from hydroshoot.constants import co2_molar_mass
 from pandas import read_csv, concat, DataFrame
 
 from archi_panel.utils import print_progress_bar
@@ -69,6 +70,7 @@ def concat_leaf_props(path_outputs: Path, sky_cond: str, combinations: list) -> 
 
     res = concat(dfs)
     res.rename(columns={'Unnamed: 0': 'time'}, inplace=True)
+    res['An'] *= (co2_molar_mass * 1.e-6 * 3600.)
     res.to_csv(path_outputs / f'{sky_cond}/summary_props.csv', index=False, sep=';', decimal='.')
 
     pass

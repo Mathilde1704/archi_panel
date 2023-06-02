@@ -57,6 +57,6 @@ def print_progress_bar(iteration: int, total: int, prefix: str = '', suffix: str
     print(f'\r{prefix} |{bar}| {percent}% {suffix}', end=print_end)
     # Print New Line on Complete
     if iteration == total:
-        print()
+        print('')
 
     pass

@@ -75,7 +75,7 @@ if __name__ == '__main__':
 
     time_on = datetime.now()
     mp(sim_args=product([cfg.path_weather], [cfg.params], [cfg.path_preprocessed_inputs], params_archi,
-                        [cfg.path_outputs], cfg.dates, [is_consider_hydraulic_network]),
+                        [path_outputs], cfg.dates, [is_consider_hydraulic_network]),
        nb_cpu=12)
     time_off = datetime.now()
     print(f"--- Total runtime: {(time_off - time_on).seconds} sec ---")

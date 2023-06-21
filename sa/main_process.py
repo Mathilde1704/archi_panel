@@ -22,6 +22,8 @@ def run_hydroshoot(path_weather: Path, user_params: dict, path_preprocessed_dir:
     if is_hydraulic:
         user_params["simulation"].update({"hydraulic_structure": True, "negligible_shoot_resistance": False})
         user_params["exchange"]["par_gs"]['model'] = "misson"
+        user_params["soil"]["avg_root_radius"] = 0.001
+        user_params["soil"]["root_length"] = 3000
 
     g, scene = architecture.load_mtg(
         path_mtg=str(path_preprocessed / 'initial_mtg.pckl'),

@@ -90,7 +90,7 @@ def preprocess_dynamic(path_weather: Path, params_architecture: dict, path_prepr
     grapevine_mtg.properties()['geometry'] = {k: grapevine_mtg.node(k).geometry
                                               for k in architecture.get_leaves(g=grapevine_mtg)}
     dynamic_data = {}
-    inputs_hourly = io.HydroShootHourlyInputs(psi_soil=inputs.psi_soil_forced, sun2scene=inputs.sun2scene)
+    inputs_hourly = io.HydroShootHourlyInputs(psi_soil=inputs.psi_soil, sun2scene=inputs.sun2scene)
     for date_sim in inputs.params.simulation.date_range:
         print(date_sim)
         inputs_hourly.update(
@@ -98,6 +98,7 @@ def preprocess_dynamic(path_weather: Path, params_architecture: dict, path_prepr
             date_sim=date_sim,
             hourly_weather=inputs.weather[inputs.weather.index == date_sim],
             psi_pd=inputs.psi_pd,
+            is_psi_forced=inputs.is_psi_soil_forced,
             params=inputs.params)
 
         grapevine_mtg, diffuse_to_total_irradiance_ratio = initialisation.init_hourly(

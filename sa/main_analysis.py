@@ -47,8 +47,8 @@ def concat_leaf_props(path_outputs: Path, sky_cond_infos: tuple, combinations: l
                   'Jm25', 'TPU25', 'Rd', 'u', 'Eabs', 'psi_head', 'gbH', 'Tlc', 'An', 'gs', 'gb', 'E', 'leaf_area')
     nb_combis = len(combinations)
 
-    dfs = []
     for hour in range(24):
+        dfs = []
         for i, combi in enumerate(combinations):
             id_combi = combi[0]
 

@@ -36,7 +36,7 @@ class Params:
             min_value=self.internode_length.min / self._reference_internode_length,
             max_value=self.internode_length.max / self._reference_internode_length,
             nb_values=10)
-        self.limb_inclination = self.get_param_values(min_value=0, max_value=90, nb_values=10)
+        self.limb_inclination = self.get_param_values(min_value=-90, max_value=0, nb_values=10)
         self.leaf_area = self.get_param_values(min_value=50, max_value=350, nb_values=10)
         self.midrib_length = self._param_values(
             min=self.calc_midrib_length(leaf_area=self.leaf_area.min),

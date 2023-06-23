@@ -78,7 +78,10 @@ if __name__ == '__main__':
     params_sim = Params()
     cfg = ConfigSensitivityAnalysis(is_on_remote=True)
     # verify_identical_leaf_number(path_preprocessed_inputs=cfg.path_preprocessed_inputs, combis=params.combinations)
-    for sky_condition in cfg.dates:
-        concat_time_series(path_outputs=cfg.path_outputs, sky_cond=sky_condition[0], params=params_sim)
-        concat_leaf_props(
-            path_outputs=cfg.path_outputs, sky_cond_infos=sky_condition, combinations=params_sim.combinations)
+    for is_hydraulic in (True, False):
+        path_outputs = cfg.path_outputs.parent / "_".join((cfg.path_outputs.name, f"{'psi' if is_hydraulic else 'vpd'}"))
+        for sky_condition in cfg.dates:
+            concat_time_series(path_outputs=path_outputs, sky_cond=sky_condition[0], params=params_sim)
+            concat_leaf_props(
+                path_outputs=path_outputs, sky_cond_infos=sky_condition, combinations=params_sim.combinations)
+

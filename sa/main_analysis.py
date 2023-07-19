@@ -28,9 +28,9 @@ def concat_time_series(path_outputs: Path, sky_cond: str, params: Params):
         print_progress_bar(iteration=i, total=nb_combis)
         df = read_csv(path_outputs / f'{sky_cond}/combi_{id_combi}/time_series.csv', sep=';', decimal='.')
         df.loc[:, 'combi'] = id_combi
-        df.loc[:, 'len'] = params.internode_length.bins[list(params.internode_scale.bins).index(internode_scale)]
+        df.loc[:, 'len'] = internode_scale * params._reference_internode_length
         df.loc[:, 'r'] = limb_inclination
-        df.loc[:, 'la'] = params.leaf_area.bins[list(params.midrib_length.bins).index(midrib_length)]
+        df.loc[:, 'la'] = params.calc_leaf_area(midrib_length=midrib_length)
         dfs.append(df)
 
     res = concat(dfs)

@@ -70,6 +70,10 @@ class Params:
         """
         return (leaf_area / 0.0107) ** 0.25
 
+    @staticmethod
+    def calc_leaf_area(midrib_length: float):
+        return 0.0107 * midrib_length ** 4
+
     def add_real_panel_data(self):
         df = read_csv(self.path_root / 'mathilde_panel.csv', sep=';', decimal='.')
 

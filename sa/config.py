@@ -4,6 +4,7 @@ from json import load
 from pathlib import Path
 
 from numpy import linspace
+from pandas import read_csv
 
 from funcs import calc_reference_mtg_internode_length
 
@@ -26,8 +27,10 @@ class ConfigSensitivityAnalysis:
 
 
 class Params:
-    def __init__(self):
-        self.path_reference_digit = Path(__file__).parent.resolve() / 'digit.csv'
+    def __init__(self, is_include_real_panel_data: bool = False):
+        self.path_root = Path(__file__).parent.resolve()
+        self.path_reference_digit = self.path_root / 'digit.csv'
+
         self._param_values = namedtuple("ParamValues", ['min', 'max', 'bins'])
         self._reference_internode_length = calc_reference_mtg_internode_length(path_digit=self.path_reference_digit)
 
@@ -48,6 +51,9 @@ class Params:
                                           self.midrib_length.bins))
         self.combinations = list(zip(range(len(self._combinations)), *zip(*self._combinations)))
 
+        if is_include_real_panel_data:
+            self.add_real_panel_data()
+
     def get_param_values(self, min_value: float, max_value: float, nb_values: int):
         return self._param_values(min=min_value, max=max_value, bins=linspace(min_value, max_value, nb_values))
 
@@ -63,3 +69,12 @@ class Params:
 
         """
         return (leaf_area / 0.0107) ** 0.25
+
+    def add_real_panel_data(self):
+        df = read_csv(self.path_root / 'mathilde_panel.csv', sep=';', decimal='.')
+
+        internode_scale = df['LEN'] / self._reference_internode_length
+        limb_inclination = - df['R']
+        midrib_length = df['SF'].apply(lambda x: self.calc_midrib_length(leaf_area=x))
+        self.combinations += list(zip(df['Genotype'], internode_scale, limb_inclination, midrib_length))
+        pass

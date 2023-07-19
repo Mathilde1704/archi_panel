@@ -137,7 +137,7 @@ def mp(sim_args: Iterable, func: Callable, nb_cpu: int = 2):
 if __name__ == '__main__':
     path_root = Path(__file__).parent.resolve()
     cfg = config.ConfigSensitivityAnalysis(is_on_remote=False)
-    params = config.Params()
+    params = config.Params(is_include_real_panel_data=True)
     is_nitrogen_cst = True
 
     params_archi = params.combinations

@@ -40,12 +40,13 @@ def calc_reference_mtg_internode_length(path_digit: Path) -> float:
 
 def build_mtg2(path_digit: Path, leaf_inc: float, lim_max: float, scale: float = 1) -> tuple:
     mtg_vine = architecture.vine_mtg(path_digit)
+    cordon = architecture.cordon_vector(g=mtg_vine)[-1]
 
     for v in traversal.iter_mtg2(mtg_vine, mtg_vine.root):
         # architecture.vine_phyto_modular(mtg_vine, v)
         architecture.vine_axeII(mtg_vine, v, ci_nfii=0)
         architecture.vine_petiole(mtg_vine, v)
-        architecture.vine_leaf(mtg_vine, v, leaf_inc=leaf_inc, lim_max=lim_max)
+        architecture.vine_leaf(mtg_vine, v, leaf_inc=leaf_inc, lim_max=lim_max, cordon_vector=cordon)
 
     mtg_vine = scale_mtg(g=mtg_vine, scale=scale)
 

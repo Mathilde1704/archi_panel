@@ -1,12 +1,12 @@
 from pathlib import Path
 from pickle import load as load_pickle
 
+from config import Params, ConfigSensitivityAnalysis
 from hydroshoot.architecture import load_mtg, get_leaves
 from hydroshoot.constants import co2_molar_mass
 from pandas import read_csv, concat, DataFrame
 
 from archi_panel.utils import print_progress_bar
-from config import Params, ConfigSensitivityAnalysis
 
 
 def verify_identical_leaf_number(path_preprocessed_inputs: Path, combis: list):
@@ -75,7 +75,7 @@ def concat_leaf_props(path_outputs: Path, sky_cond_infos: tuple, combinations: l
 
 
 if __name__ == '__main__':
-    params_sim = Params()
+    params_sim = Params(is_include_real_panel_data=True)
     cfg = ConfigSensitivityAnalysis(is_on_remote=True)
     # verify_identical_leaf_number(path_preprocessed_inputs=cfg.path_preprocessed_inputs, combis=params.combinations)
     for is_hydraulic in (True, False):
@@ -84,4 +84,3 @@ if __name__ == '__main__':
             concat_time_series(path_outputs=path_outputs, sky_cond=sky_condition[0], params=params_sim)
             concat_leaf_props(
                 path_outputs=path_outputs, sky_cond_infos=sky_condition, combinations=params_sim.combinations)
-

@@ -67,7 +67,7 @@ if __name__ == '__main__':
 
     path_root = Path(__file__).parent
     cfg = config.ConfigSensitivityAnalysis(is_on_remote=False)
-    params = config.Params()
+    params = config.Params(is_include_real_panel_data=True)
     params_archi = params.combinations
 
     path_outputs = cfg.path_outputs.parent / "_".join((cfg.path_outputs.name,

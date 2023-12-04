@@ -1,12 +1,13 @@
 from pathlib import Path
 from pickle import load as load_pickle
 
-from config import Params, ConfigSensitivityAnalysis
 from hydroshoot.architecture import load_mtg, get_leaves
 from hydroshoot.constants import co2_molar_mass
+from numpy import array, arctan, pi
 from pandas import read_csv, concat, DataFrame
 
 from archi_panel.utils import print_progress_bar
+from config import Params, ConfigSensitivityAnalysis
 
 
 def verify_identical_leaf_number(path_preprocessed_inputs: Path, combis: list):
@@ -74,12 +75,36 @@ def concat_leaf_props(path_outputs: Path, sky_cond_infos: tuple, combinations: l
     pass
 
 
+def calc_azimuth(path_preprocessed_outputs: Path):
+    azimuth = []
+    for pth in path_preprocessed_outputs.iterdir():
+        with open(pth / 'initial_mtg.pckl', mode='rb') as f:
+            g, _ = load_pickle(f)
+        azimuth += [get_azimuth(g.node(v)) for v in get_leaves(g)]
+    DataFrame({"azimuth": azimuth}).to_csv(path_preprocessed_outputs.parent / 'azimuth.csv')
+    pass
+
+
+def get_azimuth(node):
+    dx, dy, dz = array(node.TopPosition) - array(node.BotPosition)
+    if dx > 0:  # heads south
+        if dy > 0:  # heads east
+            azi = 180 - arctan(dy / dx) / pi * 180
+        else:
+            azi = - (180 + arctan(dy / dx) / pi * 180)
+    else:
+        azi = -arctan(dy / dx) / pi * 180
+    return azi
+
+
 if __name__ == '__main__':
     params_sim = Params(is_include_real_panel_data=True)
     cfg = ConfigSensitivityAnalysis(is_on_remote=True)
     # verify_identical_leaf_number(path_preprocessed_inputs=cfg.path_preprocessed_inputs, combis=params.combinations)
+    calc_azimuth(path_preprocessed_outputs=cfg.path_preprocessed_inputs)
     for is_hydraulic in (True, False):
-        path_outputs = cfg.path_outputs.parent / "_".join((cfg.path_outputs.name, f"{'psi' if is_hydraulic else 'vpd'}"))
+        path_outputs = cfg.path_outputs.parent / "_".join(
+            (cfg.path_outputs.name, f"{'psi' if is_hydraulic else 'vpd'}"))
         for sky_condition in cfg.dates:
             concat_time_series(path_outputs=path_outputs, sky_cond=sky_condition[0], params=params_sim)
             concat_leaf_props(

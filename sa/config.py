@@ -13,11 +13,12 @@ class ConfigSensitivityAnalysis:
     def __init__(self, is_on_remote: bool):
         path_root = Path(__file__).parent.resolve()
         path_relative = '../../../../mnt/data/hydroshoot/project_mathilde_fspm/sa/' if is_on_remote else ''
+        self.path_weather_dir = path_root / 'weather_scenarios'
 
         self.path_preprocessed_inputs = path_root / ''.join((path_relative, 'preprocessed_inputs'))
         self.path_preprocessed_inputs.mkdir(parents=True, exist_ok=True)
 
-        self.path_weather = path_root.parent / 'data/weather.csv'
+        self.path_weather = self.path_weather_dir / 'weather_2019.csv'
         self.constant_nitrogen_content = 2.2
         with open(path_root / 'params.json', mode='r') as f:
             self.params = load(f)

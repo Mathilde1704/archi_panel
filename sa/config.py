@@ -25,6 +25,19 @@ class ConfigSensitivityAnalysis:
         self.dates = [('clear_sky', "2022-07-11"),
                       ('cloudy_sky', "2021-07-12")]
         self.path_outputs = self.path_preprocessed_inputs.parent / f'outputs'
+        self.scenarios_weather = None
+        self.scenarios_soil_water_deficit = None
+        self.set_scenarios()
+
+    def set_scenarios(self):
+        self.scenarios_weather = [(s1, self.path_weather_dir / s2)
+                                  for s1, s2 in [('extremely_hot', 'weather_2019.csv'),
+                                                 ('very_hot', 'weather_2019_mean_data_hot_35.csv'),
+                                                 ('hot', 'weather_2019_mean_data_hot_38_40.csv')]]
+
+        self.scenarios_soil_water_deficit = [('mild_wd', -0.3),
+                                             ('strong_wd', -0.6)]
+        pass
 
 
 class Params:

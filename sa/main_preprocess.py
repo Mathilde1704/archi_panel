@@ -108,8 +108,8 @@ def preprocess_dynamic(params_architecture: dict, path_preprocessed_dir: Path,
 
         dynamic_data.update({grapevine_mtg.date: {
             'diffuse_to_total_irradiance_ratio': diffuse_to_total_irradiance_ratio,
-            'Ei': grapevine_mtg.property('Ei'),
-            'Eabs': grapevine_mtg.property('Eabs')}})
+            'Ei': {k: round(v, 1) for k, v in grapevine_mtg.property('Ei').items()},
+            'Eabs': {k: round(v, 1) for k, v in grapevine_mtg.property('Eabs').items()}}})
 
     with open(path_preprocessed / f'dynamic_{weather_scenario}.json', mode='w') as f_prop:
         dump(dynamic_data, f_prop, indent=2)

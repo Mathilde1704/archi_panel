@@ -10,14 +10,15 @@ from hydroshoot import architecture, model
 import config
 
 
-def run_hydroshoot(path_weather: Path, user_params: dict, path_preprocessed_dir: Path, params_architecture: tuple,
-                   path_output_dir: Path, date_info: tuple, is_hydraulic: bool):
+def run_hydroshoot(user_params: dict, path_preprocessed_dir: Path, params_architecture: tuple,
+                   scenario_weather_info: tuple[str, Path], scenario_soil_info: tuple[str, float],
+                   path_output_dir: Path, is_hydraulic: bool):
     id_sim, *_ = params_architecture
 
     path_preprocessed = path_preprocessed_dir / f'combi_{id_sim}'
 
-    user_params['simulation'].update({'sdate': f"{date_info[1]} 00:00:00"})
-    user_params['simulation'].update({'edate': f"{date_info[1]} 23:00:00"})
+    weather_scenario, path_weather = scenario_weather_info
+    soil_scenario, soil_water_potential = scenario_soil_info
 
     if is_hydraulic:
         user_params["simulation"].update({"hydraulic_structure": True, "negligible_shoot_resistance": False})
@@ -31,10 +32,10 @@ def run_hydroshoot(path_weather: Path, user_params: dict, path_preprocessed_dir:
 
     with open(path_preprocessed / 'static.json', mode='r') as f:
         static_inputs = load_json(f)
-    with open(path_preprocessed / f'dynamic_{date_info[0]}.json', mode='r') as f:
+    with open(path_preprocessed / f'dynamic_{weather_scenario}.json', mode='r') as f:
         dynamic_inputs = load_json(f)
 
-    path_output = path_output_dir / date_info[0] / f'combi_{id_sim}'
+    path_output = path_output_dir / f'{weather_scenario}_{soil_scenario}' / f'combi_{id_sim}'
     path_output.mkdir(parents=True, exist_ok=True)
 
     model.run(
@@ -45,7 +46,7 @@ def run_hydroshoot(path_weather: Path, user_params: dict, path_preprocessed_dir:
         scene=scene,
         write_result=True,
         path_output=path_output / 'time_series.csv',
-        psi_soil_init=-0.01,
+        psi_soil_init=soil_water_potential,
         form_factors=static_inputs['form_factors'],
         leaf_nitrogen=static_inputs['Na'],
         leaf_ppfd=dynamic_inputs)
@@ -74,8 +75,9 @@ if __name__ == '__main__':
                                                        f"{'psi' if is_consider_hydraulic_network else 'vpd'}"))
 
     time_on = datetime.now()
-    mp(sim_args=product([cfg.path_weather], [cfg.params], [cfg.path_preprocessed_inputs], params_archi,
-                        [path_outputs], cfg.dates, [is_consider_hydraulic_network]),
+    mp(sim_args=product([cfg.params], [cfg.path_preprocessed_inputs], params_archi,
+                        cfg.scenarios_weather, cfg.scenarios_soil_water_deficit,
+                        [path_outputs], [is_consider_hydraulic_network]),
        nb_cpu=12)
     time_off = datetime.now()
     print(f"--- Total runtime: {(time_off - time_on).seconds} sec ---")

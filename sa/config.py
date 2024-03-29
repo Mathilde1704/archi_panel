@@ -31,9 +31,9 @@ class ConfigSensitivityAnalysis:
 
     def set_scenarios(self):
         self.scenarios_weather = [(s1, self.path_weather_dir / s2)
-                                  for s1, s2 in [('extremely_hot', 'weather_2019.csv'),
-                                                 ('very_hot', 'weather_2019_mean_data_hot_35.csv'),
-                                                 ('hot', 'weather_2019_mean_data_hot_38_40.csv')]]
+                                  for s1, s2 in [('extremely_hot', 'weather_extremely_hot.csv'),
+                                                 ('very_hot', 'weather_very_hot.csv'),
+                                                 ('hot', 'weather_hot.csv')]]
 
         self.scenarios_soil_water_deficit = [('mild_wd', -0.3),
                                              ('strong_wd', -0.6)]

@@ -8,8 +8,12 @@ def create_weather_scenarios() -> None:
     weather_2019 = read_csv(path_root / 'weather_2019.csv',
                             sep=';', decimal='.', parse_dates=['time'], index_col='time')
 
-    file_names = ('mean_data_hot_35.csv', 'mean_data_hot_38_40.csv')
-    for file_name in file_names:
+    scenarios = [
+        ('hot', 'mean_data_hot_35.csv'),
+        ('very_hot', 'mean_data_hot_37.csv'),
+        ('extremely_hot', 'mean_data_hot_45.csv')]
+
+    for scenario, file_name in scenarios:
         df = read_csv(path_root / f'source/{file_name}', sep=';', decimal='.')
         df.loc[:, 'datetime'] = df['heure'].apply(lambda x: datetime.strptime(f'2019-06-28 {x}', '%Y-%m-%d %H:%M:%S'))
         df.set_index('datetime', inplace=True)
@@ -19,14 +23,15 @@ def create_weather_scenarios() -> None:
         df2.loc[df.index, 'Tac'] = df.loc[:, 'Tmoy'].to_list()
         df2.loc[df.index, 'u'] = df.loc[:, 'Vent'].to_list()
         df2.loc[df.index, 'Rg'] = df.loc[:, 'Rg_2'].to_list()
-        df2.reset_index().to_csv(path_root / f'weather_2019_{file_name}', sep=';', decimal='.', index=False)
+        df2.loc[df.index, 'hs'] = df.loc[:, 'RH'].to_list()
+        df2.reset_index().to_csv(path_root / f"weather_{scenario}.csv", sep=';', decimal='.', index=False)
 
     with open(path_root / 'README.txt', mode='w') as f:
         f.write(
-            f"# The files {' and '.join([f'weather_2019_{s}' for s in file_names])} were automatically generated using:\n"
+            f"# The weather files were automatically generated using:\n"
             f"# ~/{'/'.join([s for s in Path(__file__).parts[-4:]])}.\n"
-            "# For each file, data of 2019-06-28 from weather_2019.csv were replaced by those\n"
-            f"# from source/{' and '.join(file_names)}.\n")
+            "# For each file, data of 2019-06-28 from weather_2019.csv were replaced by those under source/\n"
+            f"# {' and '.join(list(zip(*scenarios))[1])}.\n")
 
     pass
 

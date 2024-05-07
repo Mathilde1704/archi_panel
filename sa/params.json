@@ -171,7 +171,7 @@
     }
   },
   "soil": {
-    "soil_class": "Sandy_Clay_Loam",
+    "soil_class": "Sandy_Loam",
     "soil_dimensions": {
       "depth": 2.0
     },

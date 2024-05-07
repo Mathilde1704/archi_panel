@@ -143,10 +143,10 @@
         "deltaHa": 37.83
       },
       "photo_inhibition": {
-        "dhd_inhib_beg":200,
-        "dHd_inhib_max":200,
-        "psi_inhib_beg":-1.5,
-        "psi_inhib_max":-3,
+        "dhd_inhib_beg": 200,
+        "dHd_inhib_max": 200,
+        "psi_inhib_beg": -1.5,
+        "psi_inhib_max": -3,
         "temp_inhib_beg": 100,
         "temp_inhib_max": 150
       }

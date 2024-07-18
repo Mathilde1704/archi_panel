@@ -5,6 +5,8 @@ from pickle import load as load_pickle
 
 from hydroshoot.architecture import load_mtg, get_leaves
 from hydroshoot.constants import co2_molar_mass
+from hydroshoot.display import visu
+from openalea.plantgl.all import Scene
 from pandas import read_csv, concat, DataFrame, date_range
 
 from archi_panel.utils import print_progress_bar
@@ -79,6 +81,31 @@ def concat_leaf_props(path_sim_outputs: Path, weather_soil_scenario: str, combin
                    index=False, sep=';', decimal='.')
 
     pass
+
+
+def visualize_mockup(
+        path_root: Path,
+        combi: str,
+        scenario: str,
+        hour: int,
+        prop: str,
+        prop_limits: list) -> None:
+    pth = path_root / r'preprocessed_inputs' / combi
+    g_init, _ = load_mtg(path_mtg=str(pth / 'initial_mtg.pckl'), path_geometry=str(pth / 'geometry.bgeom'))
+    geom = {k: v for k, v in g_init.property('geometry').items() if not g_init.node(k).label.startswith('L')}
+    g_init.properties()['geometry'] = geom
+
+    pth2 = path_root / r'outputs_psi' / scenario / combi
+    g_processed, _ = load_mtg(path_mtg=str(pth2 / f'mtg20190628{hour:02d}0000.pckl'),
+                              path_geometry=str(pth / 'geometry.bgeom'))
+    for i, v in enumerate(prop_limits):
+        g_processed.properties()['label'].update({i: 'Toto'})
+        g_processed.properties()['Tlc'].update({i: v})
+
+    mtg_scene = visu(g_processed, plot_prop=prop, scene=Scene(), view_result=True)
+    mtg_scene = visu(g_init, def_elmnt_color_dict=True, scene=mtg_scene, view_result=True)
+
+    return mtg_scene
 
 
 if __name__ == '__main__':

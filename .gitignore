@@ -141,4 +141,4 @@ sim_vsp/preprocessed_data
 sim_vsp/outputs
 script/*.png
 sa/preprocessed_inputs
-sa/outputs
+sa/outputs*/

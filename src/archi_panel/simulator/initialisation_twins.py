@@ -2,7 +2,7 @@ from datetime import datetime
 from typing import Tuple
 
 from hydroshoot.architecture import add_soil_surface_mesh, get_leaves, get_mtg_base
-from hydroshoot.energy import set_form_factors_simplified, set_wind_speed
+from hydroshoot.energy import set_form_factors_simplified
 from hydroshoot.initialisation import (remove_stem_geometry, add_rhyzosphere_concentric_cylinders, traversal,
                                        calc_nitrogen_distribution, set_photosynthetic_capacity)
 from hydroshoot.io import HydroShootInputs, HydroShootHourlyInputs

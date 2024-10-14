@@ -135,7 +135,7 @@ example/output*
 data/raw
 sim/outputs
 sim/preprocessed_data
-misc/
+
 sim/project_mathilde_fspm
 sim_vsp/preprocessed_data
 sim_vsp/outputs

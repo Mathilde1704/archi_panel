@@ -8,8 +8,9 @@ Model HydroShoot [(Albasha et al., 2019)](https://doi.org/10.1093/insilicoplants
 1. Create a conda environment for the HydroShoot model
 
 
-    conda create -n <MyEnvName> -c openalea3 -c conda-forge openalea.hydroshoot=5.2.0
-    conda activate <MyEnvName>
+    conda create -n MyEnvName -c openalea3 -c conda-forge openalea.hydroshoot=5.2.0
+	
+    conda activate MyEnvName
 
 2. Go to the repository where you would like to clone the 'archi_panel' project
 and perform the cloning using, for example, the https url
@@ -22,4 +23,5 @@ and perform the cloning using, for example, the https url
 
 
     cd archi_panel
+	
     pip install -e .

@@ -65,15 +65,14 @@ def preprocess_static(path_weather: Path, params_architecture: tuple, path_prepr
     pass
 
 
-def preprocess_dynamic(path_weather: Path, params_architecture: dict, path_preprocessed_dir: Path,
-                       user_params: dict, date_info: tuple):
+def preprocess_dynamic(params_architecture: dict, path_preprocessed_dir: Path,
+                       user_params: dict, scenario_weather_info: tuple[str, Path]):
     sim_id, internode_scale, limb_inclination, midrib_length = params_architecture
 
     print("Computing 'dynamic' data...")
     path_preprocessed = path_preprocessed_dir / f'combi_{sim_id}'
 
-    user_params['simulation'].update({'sdate': f"{date_info[1]} 00:00:00"})
-    user_params['simulation'].update({'edate': f"{date_info[1]} 23:00:00"})
+    weather_scenario, path_weather = scenario_weather_info
 
     grapevine_mtg, pgl_scene = architecture.load_mtg(
         path_mtg=str(path_preprocessed / 'initial_mtg.pckl'),
@@ -109,10 +108,10 @@ def preprocess_dynamic(path_weather: Path, params_architecture: dict, path_prepr
 
         dynamic_data.update({grapevine_mtg.date: {
             'diffuse_to_total_irradiance_ratio': diffuse_to_total_irradiance_ratio,
-            'Ei': grapevine_mtg.property('Ei'),
-            'Eabs': grapevine_mtg.property('Eabs')}})
+            'Ei': {k: round(v, 1) for k, v in grapevine_mtg.property('Ei').items()},
+            'Eabs': {k: round(v, 1) for k, v in grapevine_mtg.property('Eabs').items()}}})
 
-    with open(path_preprocessed / f'dynamic_{date_info[0]}.json', mode='w') as f_prop:
+    with open(path_preprocessed / f'dynamic_{weather_scenario}.json', mode='w') as f_prop:
         dump(dynamic_data, f_prop, indent=2)
     pass
 
@@ -150,7 +149,7 @@ if __name__ == '__main__':
                         [cfg.params], [cfg.constant_nitrogen_content if is_nitrogen_cst else None]),
        func=run_preprocess_static,
        nb_cpu=12)
-    mp(sim_args=product([cfg.path_weather], params_archi, [cfg.path_preprocessed_inputs], [cfg.params], cfg.dates),
+    mp(sim_args=product(params_archi, [cfg.path_preprocessed_inputs], [cfg.params], cfg.scenarios_weather),
        func=run_preprocess_dynamic,
        nb_cpu=12)
     time_off = datetime.now()
